@@ -8,6 +8,7 @@ import { minuteSelected } from '../actions';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 
+//=================
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
@@ -15,55 +16,63 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+//=================
 const setMinutes = () => {
   return Array.from(new Array(60), (value, counter) => {
     return counter + 1;
   });
 }
 
+//=================
+const displayMinutes = (minutes) => {
+  return (
+    minutes ?
+    minutes.map((minute) =>
+      <option key={minute} value={minute}>
+            {minute}
+          </option>
+    ) :
+    null
+  )
+}
+
+//=================
 const MinuteSelect = (props) => {
-  const classes = useStyles();
-  const minutes = setMinutes();
-  const eventHandler = (name) => (event) => {
+
+  //---------------
+  const eventHandler = (event) => {
     props.minuteSelected(event.target.value);
   }
 
-
+  //---------------
   return (
-    <FormControl className={classes.formControl}>
+    <FormControl className={useStyles().formControl}>
       <Select
         native
         value={props.minute}
-        onChange={eventHandler('minute')}
+        onChange={eventHandler}
       >
       <option disabled hidden value=''>{ props.minute } </option>
-      {
-        minutes ? 
-          minutes.map((minute) =>  
-            <option key={minute} value={minute}>
-              {minute}
-            </option>
-          )
-        : null
-      }
+      { displayMinutes(setMinutes()) }
       </Select>
       <FormHelperText>Minute</FormHelperText>
     </FormControl>
   );
 };
 
-
+//=================
 const mapStateToProps = (state) => {
   return {
     minute: (state.datepicker.minuteSelected ? state.datepicker.minuteSelected : moment().minutes())
   }
 }
 
+//=================
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     minuteSelected
   }, dispatch);
 }
 
-
+//=================
 export default connect(mapStateToProps, mapDispatchToProps)(MinuteSelect);

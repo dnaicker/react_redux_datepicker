@@ -8,6 +8,7 @@ import { hourSelected } from '../actions';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 
+//=================
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
@@ -15,53 +16,63 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+//=================
 const setHours = () => {
   return Array.from(new Array(24), (value, counter) => {
     return counter + 1;
   });
 }
 
-const HourSelect = (props) => {
-  const classes = useStyles();
-  const hours = setHours();
+//=================
+const displayHours = (hours) => {
+  return (
+    hours ?
+    hours.map((hour) =>
+      <option key={hour} value={hour}>
+          {hour}
+        </option>
+    ) :
+    null
+  );
+}
 
-  const eventHandler = (name) => (event) => {
+//=================
+const HourSelect = (props) => {
+
+  //---------------
+  const eventHandler = (event) => {
     props.hourSelected(event.target.value);
   }
 
+  //---------------
   return (
-    <FormControl className={classes.formControl}>
+    <FormControl className={useStyles().formControl}>
       <Select
         native
         value={props.hour}
-        onChange={eventHandler('hour')}
+        onChange={eventHandler}
       >
       <option disabled hidden value=''>{ props.hour } </option>
-      {
-        hours ? 
-          hours.map((hour) =>  
-            <option key={hour} value={hour}>
-              {hour}
-            </option>
-          )
-        : null
-      }
+      { displayHours(setHours()) }
       </Select>
       <FormHelperText>Hour</FormHelperText>
     </FormControl>
   );
 };
 
+//=================
 const mapStateToProps = (state) => {
   return {
     hour: (state.datepicker.hourSelected ? state.datepicker.hourSelected : moment().hour())
   }
 }
 
+//=================
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     hourSelected
   }, dispatch);
 }
 
+//=================
 export default connect(mapStateToProps, mapDispatchToProps)(HourSelect);

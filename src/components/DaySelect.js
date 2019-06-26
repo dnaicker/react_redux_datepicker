@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { yearSelected, monthSelected, daySelected } from '../actions';
 import { bindActionCreators } from 'redux';
 
+//=================
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
@@ -15,41 +16,53 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DaySelect = (props) => {
-  const classes = useStyles();
-  const days = props.year ? Array.from(new Array(moment(props.year + "-" + props.month, "YYYY-MM").daysInMonth()), (value, counter) => {
+//=================
+const setDays = (props) => {
+  return props.year ? Array.from(new Array(moment(props.year + "-" + props.month, "YYYY-MM").daysInMonth()), (value, counter) => {
     return counter + 1
   }) : Array.from(new Array(moment().daysInMonth()), (value, counter) => {
     return counter + 1
   });
+}
 
-  const eventHandler = (name) => (event) => {
+//=================
+const displayDays = (days) => {
+  return (
+    days ?
+    days.map((day) =>
+      <option key={day} value={day}>
+          {day}
+        </option>
+    ) :
+    null
+  );
+}
+
+//=================
+const DaySelect = (props) => {
+
+  //---------------
+  const eventHandler = (event) => {
     props.daySelected(event.target.value);
   }
 
+  //---------------
   return (
-    <FormControl className={classes.formControl}>
+    <FormControl className={useStyles().formControl}>
       <Select
         native
         value={props.day}
-        onChange={eventHandler('day')}
+        onChange={eventHandler}
       >
       <option disabled hidden value=''>{ props.day } </option>
-      {
-        days ? 
-          days.map((day) =>  
-            <option key={day} value={day}>
-              {day}
-            </option>
-          )
-        : null
-      }
+      { displayDays(setDays(props)) }
       </Select>
       <FormHelperText>Day</FormHelperText>
     </FormControl>
   );
 };
 
+//=================
 const mapStateToProps = (state) => {
   return {
     year: state.datepicker.yearSelected,
@@ -58,6 +71,7 @@ const mapStateToProps = (state) => {
   }
 }
 
+//=================
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     yearSelected,
@@ -66,4 +80,5 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch);
 }
 
+//=================
 export default connect(mapStateToProps, mapDispatchToProps)(DaySelect);
