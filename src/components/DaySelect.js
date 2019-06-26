@@ -16,7 +16,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const DaySelect = (props) => {
-  props.daySelected();
   const classes = useStyles();
   const days = props.year ? Array.from(new Array(moment(props.year + "-" + props.month, "YYYY-MM").daysInMonth()), (value, counter) => {
     return counter + 1
@@ -55,7 +54,7 @@ const mapStateToProps = (state) => {
   return {
     year: state.datepicker.yearSelected,
     month: state.datepicker.monthSelected,
-    day: state.datepicker.daySelected
+    day: (state.datepicker.daySelected ? state.datepicker.daySelected : moment().date())
   }
 }
 

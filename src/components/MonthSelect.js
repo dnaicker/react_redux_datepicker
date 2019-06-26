@@ -3,6 +3,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { makeStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import { monthSelected } from '../actions';
 import { bindActionCreators } from 'redux';
@@ -22,7 +23,6 @@ const setMonths = () => {
 const MonthSelect = (props) => {
   const classes = useStyles();
   const months = setMonths();
-  props.monthSelected();
 
   //---------
   //event: handle dropdown change
@@ -58,7 +58,7 @@ const MonthSelect = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    month: state.datepicker.monthSelected
+    month: (state.datepicker.monthSelected ? state.datepicker.monthSelected : moment().month() + 1)
   }
 }
 

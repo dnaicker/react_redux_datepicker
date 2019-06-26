@@ -24,7 +24,6 @@ const setYears = () => {
 const YearSelect = (props) => {
   const classes = useStyles();
   const years = setYears();
-  props.yearSelected();
 
   const eventHandler = (event) => {
     props.yearSelected(event.target.value);
@@ -52,8 +51,9 @@ const YearSelect = (props) => {
 }
 
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
-    year: state.datepicker.yearSelected
+    year: (state.datepicker.yearSelected ? state.datepicker.yearSelected : moment().year())
   }
 }
 

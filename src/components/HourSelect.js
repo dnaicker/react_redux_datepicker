@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { hourSelected } from '../actions';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -23,7 +24,6 @@ const setHours = () => {
 const HourSelect = (props) => {
   const classes = useStyles();
   const hours = setHours();
-  props.hourSelected();
 
   const eventHandler = (name) => (event) => {
     props.hourSelected(event.target.value);
@@ -54,7 +54,7 @@ const HourSelect = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    hour: state.datepicker.hourSelected
+    hour: (state.datepicker.hourSelected ? state.datepicker.hourSelected : moment().hour())
   }
 }
 

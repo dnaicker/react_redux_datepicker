@@ -1,36 +1,34 @@
-import moment from 'moment';
-
-export function yearSelected(year = moment().year()) {
+export function yearSelected(payload) {
   return {
     type: 'YEARSELECTED',
-    payload: year
+    payload: payload
   }
 }
 
-export function monthSelected(month = (moment().month() + 1)) {
+export function monthSelected(payload) {
   return {
     type: 'MONTHSELECTED',
-    payload: month
+    payload: payload
   }
 }
 
-export function daySelected(day = moment().date()) {
+export function daySelected(payload) {
   return {
     type: 'DAYSELECTED',
-    payload: day
+    payload: payload
   }
 }
 
-export function hourSelected(hour = moment().hours()) {
+export function hourSelected(payload) {
   return {
     type: 'HOURSELECTED',
-    payload: hour
+    payload: payload
   }
 }
 
-export function minuteSelected(minute = moment().minutes()) {
+export function minuteSelected(payload) {
   return {
     type: 'MINUTESELECTED',
-    payload: minute
+    payload: payload
   }
 }
