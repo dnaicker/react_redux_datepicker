@@ -63,6 +63,7 @@ const DaySelect = (props) => {
 };
 
 //=================
+//get reducers update value after action creator is updated
 const mapStateToProps = (state) => {
   return {
     year: state.datepicker.yearSelected,
@@ -72,6 +73,7 @@ const mapStateToProps = (state) => {
 }
 
 //=================
+//retrieve action creator functions
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     yearSelected,

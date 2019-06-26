@@ -8,12 +8,12 @@ import MinuteSelect from '../components/MinuteSelect.js';
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <YearSelect ></YearSelect>
-        <MonthSelect ></MonthSelect>
-        <DaySelect ></DaySelect>
-        <HourSelect ></HourSelect>
-        <MinuteSelect ></MinuteSelect>
+      <div>
+        <YearSelect />
+        <MonthSelect />
+        <DaySelect />
+        <HourSelect />
+        <MinuteSelect />
       </div>
     );
   }
