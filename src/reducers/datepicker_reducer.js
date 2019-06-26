@@ -1,37 +1,31 @@
-export function datepicker(state = {}, actions) {
+export default function(state = {}, actions) {
   switch (actions.type) {
-    case 'YEARS':
+    case 'YEARSELECTED':
       return {
         ...state,
-        years: actions.payload
+        yearSelected: actions.payload
       };
-      break;
-    case 'MONTHS':
+    case 'MONTHSELECTED':
       return {
         ...state,
-        months: actions.payload
+        monthSelected: actions.payload
       };
-      break;
-    case 'DAYS':
+    case 'DAYSELECTED':
       return {
         ...state,
-        days: actions.payload
+        daySelected: actions.payload
       };
-      break;
-    case 'HOURS':
+    case 'HOURSELECTED':
       return {
         ...state,
-        hours: actions.payload
+        hourSelected: actions.payload
       };
-      break;
-    case 'MINUTES':
+    case 'MINUTESELECTED':
       return {
         ...state,
-        minutes: actions.payload
+        minuteSelected: actions.payload
       };
-      break;
     default:
       return { ...state };
-      break;
   }
 }

@@ -1,10 +1,12 @@
 import React from 'react';
 import moment from 'moment';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { yearSelected, monthSelected, daySelected } from '../actions';
+import { bindActionCreators } from 'redux';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -13,43 +15,27 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function DaySelect(props) {
+const DaySelect = (props) => {
+  props.daySelected();
   const classes = useStyles();
-
-  const days = Array.from(new Array(moment(props.yearSelected + "-" + props.monthSelected, "YYYY-MM").daysInMonth()), (value, counter) => {
-    return counter + 1;
+  const days = props.year ? Array.from(new Array(moment(props.year + "-" + props.month, "YYYY-MM").daysInMonth()), (value, counter) => {
+    return counter + 1
+  }) : Array.from(new Array(moment().daysInMonth()), (value, counter) => {
+    return counter + 1
   });
 
-  const daySelected = props.daySelected ? props.daySelected : moment().date();
-
-  //---------
-  //struct: 
-  const [state, setState] = React.useState({
-    day: ''
-  });
-
-  //---------
-  //event: handle date change
   const eventHandler = (name) => (event) => {
-    setState({
-      ...state,
-      [name]: event.target.value
-    });
-
-    props.dayEventHandler(event);
+    props.daySelected(event.target.value);
   }
 
-  //---------
-  //render: list of days and set current date
   return (
     <FormControl className={classes.formControl}>
       <Select
         native
-        value={state.day}
+        value={props.day}
         onChange={eventHandler('day')}
-        hintStyle = {{backgroundColor: '#ffffff', zIndex: 1, pointerEvents: 'none',  width: '85%'}}
       >
-      <option disabled hidden value=''>{ daySelected } </option>
+      <option disabled hidden value=''>{ props.day } </option>
       {
         days ? 
           days.map((day) =>  
@@ -64,3 +50,21 @@ export default function DaySelect(props) {
     </FormControl>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    year: state.datepicker.yearSelected,
+    month: state.datepicker.monthSelected,
+    day: state.datepicker.daySelected
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    yearSelected,
+    monthSelected,
+    daySelected
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DaySelect);

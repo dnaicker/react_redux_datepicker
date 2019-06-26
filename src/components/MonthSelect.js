@@ -1,10 +1,11 @@
 import React from 'react';
-import moment from 'moment';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { monthSelected } from '../actions';
+import { bindActionCreators } from 'redux';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -18,26 +19,15 @@ const setMonths = () => {
     return counter + 1;
   });
 }
-export default function MonthSelect(props) {
+const MonthSelect = (props) => {
   const classes = useStyles();
   const months = setMonths();
-  const monthSelected = props.monthSelected ? props.monthSelected : moment().month() + 1;
-
-  //---------
-  //struct: set state
-  const [state, setState] = React.useState({
-    month: ''
-  });
+  props.monthSelected();
 
   //---------
   //event: handle dropdown change
-  const eventHandler = (name) => (event) => {
-    setState({
-      ...state,
-      [name]: event.target.value,
-    });
-
-    props.monthEventHandler(event);
+  const eventHandler = (event) => {
+    props.monthSelected(event.target.value);
   };
 
   //---------
@@ -46,10 +36,10 @@ export default function MonthSelect(props) {
     <FormControl className={classes.formControl}>
       <Select
         native
-        value={state.month}
-        onChange={eventHandler('month')}
+        value={props.month}
+        onChange={eventHandler}
       >
-      <option disabled hidden value=''>{ monthSelected } </option>
+      <option disabled hidden value=''>{ props.month } </option>
       {
         months ?
           months.map((month) =>  
@@ -64,3 +54,18 @@ export default function MonthSelect(props) {
     </FormControl>
   );
 }
+
+
+const mapStateToProps = (state) => {
+  return {
+    month: state.datepicker.monthSelected
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    monthSelected
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MonthSelect);

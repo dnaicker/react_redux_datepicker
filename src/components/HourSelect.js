@@ -1,10 +1,11 @@
 import React from 'react';
-import moment from 'moment';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { hourSelected } from '../actions';
+import { bindActionCreators } from 'redux';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -19,38 +20,23 @@ const setHours = () => {
   });
 }
 
-export default function HourSelect(props) {
+const HourSelect = (props) => {
   const classes = useStyles();
   const hours = setHours();
-  const hourSelected = props.hourSelected ? props.hourSelected : moment().hour();
+  props.hourSelected();
 
-  //---------
-  //struct: 
-  const [state, setState] = React.useState({
-    hour: ''
-  });
-
-  //---------
-  //event: handle date change
   const eventHandler = (name) => (event) => {
-    setState({
-      ...state,
-      [name]: event.target.value
-    });
-
-    props.hourEventHandler(event);
+    props.hourSelected(event.target.value);
   }
 
-  //---------
-  //render: list of days and set current date
   return (
     <FormControl className={classes.formControl}>
       <Select
         native
-        value={state.hour}
+        value={props.hour}
         onChange={eventHandler('hour')}
       >
-      <option disabled hidden value=''>{ hourSelected } </option>
+      <option disabled hidden value=''>{ props.hour } </option>
       {
         hours ? 
           hours.map((hour) =>  
@@ -65,3 +51,17 @@ export default function HourSelect(props) {
     </FormControl>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    hour: state.datepicker.hourSelected
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    hourSelected
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HourSelect);

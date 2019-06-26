@@ -1,10 +1,12 @@
 import React from 'react';
 import moment from 'moment';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { yearSelected } from '../actions';
+import { bindActionCreators } from 'redux';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -19,36 +21,22 @@ const setYears = () => {
   });
 }
 
-export default function YearSelect(props) {
+const YearSelect = (props) => {
   const classes = useStyles();
   const years = setYears();
-  const yearSelected = props.yearSelected ? props.yearSelected : moment().year();
+  props.yearSelected();
 
-  //---------
-  //struct: state
-  const [state, setState] = React.useState({
-    year: ''
-  });
-
-  //---------
-  const eventHandler = (name) => (event) => {
-    setState({
-      ...state,
-      [name]: event.target.value
-    })
-
-    props.yearEventHandler(event);
+  const eventHandler = (event) => {
+    props.yearSelected(event.target.value);
   }
 
-  //---------
-  //display: list of years
   return (
     <FormControl className={classes.formControl}>
       <Select
           native
-          value={state.year}
-          onChange={eventHandler('year')}>
-        <option disabled hidden value=''>{ yearSelected } </option>
+          value={props.year}
+          onChange={eventHandler}>
+        <option disabled hidden value=''>{ props.year } </option>
         { 
           years ?
             years.map( (year) => 
@@ -62,3 +50,17 @@ export default function YearSelect(props) {
     </FormControl>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    year: state.datepicker.yearSelected
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    yearSelected
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(YearSelect);

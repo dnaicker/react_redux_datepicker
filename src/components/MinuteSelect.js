@@ -1,10 +1,11 @@
 import React from 'react';
-import moment from 'moment';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { minuteSelected } from '../actions';
+import { bindActionCreators } from 'redux';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -13,45 +14,29 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-
 const setMinutes = () => {
   return Array.from(new Array(60), (value, counter) => {
     return counter + 1;
   });
 }
 
-export default function MinuteSelect(props) {
+const MinuteSelect = (props) => {
+  props.minuteSelected();
   const classes = useStyles();
   const minutes = setMinutes();
-  const minuteSelected = props.minuteSelected ? props.minuteSelected : moment().minutes();
-
-  //---------
-  //struct: 
-  const [state, setState] = React.useState({
-    minute: ''
-  });
-
-  //---------
-  //event: handle date change
   const eventHandler = (name) => (event) => {
-    setState({
-      ...state,
-      [name]: event.target.value
-    });
-
-    props.minuteEventHandler(event);
+    props.minuteSelected(event.target.value);
   }
 
-  //---------
-  //render: list of days and set current date
+
   return (
     <FormControl className={classes.formControl}>
       <Select
         native
-        value={state.minute}
+        value={props.minute}
         onChange={eventHandler('minute')}
       >
-      <option disabled hidden value=''>{ minuteSelected } </option>
+      <option disabled hidden value=''>{ props.minute } </option>
       {
         minutes ? 
           minutes.map((minute) =>  
@@ -66,3 +51,19 @@ export default function MinuteSelect(props) {
     </FormControl>
   );
 };
+
+
+const mapStateToProps = (state) => {
+  return {
+    minute: state.datepicker.minuteSelected
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    minuteSelected
+  }, dispatch);
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(MinuteSelect);

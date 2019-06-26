@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { datepicker } from './datepicker_reducer';
+import datepicker from './datepicker_reducer';
 
 const rootReducer = combineReducers({
   datepicker
