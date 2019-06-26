@@ -30,8 +30,8 @@ const displayDays = (days) => {
   return (
     days ?
     days.map((day) =>
-      <option key={day} value={day}>
-          {day}
+      <option key={ day } value={ day }>
+          { day }
         </option>
     ) :
     null

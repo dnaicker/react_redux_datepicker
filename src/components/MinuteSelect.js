@@ -28,8 +28,8 @@ const displayMinutes = (minutes) => {
   return (
     minutes ?
     minutes.map((minute) =>
-      <option key={minute} value={minute}>
-            {minute}
+      <option key={ minute } value={ minute }>
+            { minute }
           </option>
     ) :
     null
@@ -52,7 +52,7 @@ const MinuteSelect = (props) => {
         value={props.minute}
         onChange={eventHandler}
       >
-      <option disabled hidden value=''>{ props.minute } </option>
+      <option disabled hidden value=''> { props.minute } </option>
       { displayMinutes(setMinutes()) }
       </Select>
       <FormHelperText>Minute</FormHelperText>

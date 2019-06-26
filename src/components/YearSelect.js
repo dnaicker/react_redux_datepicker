@@ -28,8 +28,8 @@ const displayYears = (years) => {
   return (
     years ?
     years.map((year) =>
-      <option key={year} value={year}>
-          {year}
+      <option key={ year } value={ year }>
+          { year }
         </option>
     ) : null
   );
@@ -50,7 +50,7 @@ const YearSelect = (props) => {
           native
           value={props.year}
           onChange={eventHandler}>
-        <option disabled hidden value=''>{ props.year } </option>
+        <option disabled hidden value=''> { props.year } </option>
         { displayYears(setYears()) }
       </Select>
       <FormHelperText>Year</FormHelperText>

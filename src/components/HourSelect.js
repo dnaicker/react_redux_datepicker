@@ -28,8 +28,8 @@ const displayHours = (hours) => {
   return (
     hours ?
     hours.map((hour) =>
-      <option key={hour} value={hour}>
-          {hour}
+      <option key={ hour } value={ hour }>
+          { hour }
         </option>
     ) :
     null
